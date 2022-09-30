@@ -14,13 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-x-superset-image: &superset-image apache/superset:${TAG:-latest-dev}
+#x-superset-image: &superset-image apache/superset:${TAG:-latest-dev}
+x-superset-image: &superset-image apache/superset:${TAG:-master}
 x-superset-depends-on: &superset-depends-on
   - db
   - redis
 x-superset-volumes: &superset-volumes
   # /app/pythonpath_docker will be appended to the PYTHONPATH in the final container
   - ./docker:/app/docker
+#  - ./superset:/app/superset
+#  - ./superset-frontend:/app/superset-frontend
   - superset_home:/app/superset_home
 
 version: "3.7"
@@ -37,6 +40,8 @@ services:
     image: postgres:10
     container_name: superset_db
     restart: unless-stopped
+    ports:
+      - 5432:5432
     volumes:
       - db_home:/var/lib/postgresql/data
 

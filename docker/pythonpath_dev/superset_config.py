@@ -62,6 +62,11 @@ SQLALCHEMY_DATABASE_URI = "%s://%s:%s@%s:%s/%s" % (
     DATABASE_DB,
 )
 
+# 自定义用户登录验证
+from custom_security_manager import CustomSecurityManager
+
+CUSTOM_SECURITY_MANAGER = CustomSecurityManager
+
 REDIS_HOST = get_env_variable("REDIS_HOST")
 REDIS_PORT = get_env_variable("REDIS_PORT")
 REDIS_CELERY_DB = get_env_variable("REDIS_CELERY_DB", "0")
@@ -103,7 +108,7 @@ CELERY_CONFIG = CeleryConfig
 
 FEATURE_FLAGS = {
     "ALERT_REPORTS": True,
-    "ENABLE_TEMPLATE_PROCESSING": True, # 开启sql模板支持
+    "ENABLE_TEMPLATE_PROCESSING": True,  # 开启sql模板支持
 }
 
 ALERT_REPORTS_NOTIFICATION_DRY_RUN = True
