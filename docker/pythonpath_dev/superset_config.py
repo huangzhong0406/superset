@@ -63,6 +63,13 @@ SQLALCHEMY_DATABASE_URI = "%s://%s:%s@%s:%s/%s" % (
     DATABASE_DB,
 )
 
+# Setup default language
+BABEL_DEFAULT_LOCALE = "zh"
+# The allowed translation for you app
+LANGUAGES = {
+    "zh": {"flag": "cn", "name": "Chinese"},
+}
+
 # 自定义用户登录验证
 CUSTOM_SECURITY_MANAGER = CustomSecurityManager
 
