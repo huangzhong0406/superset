@@ -16,10 +16,12 @@ class CustomAuthDBView(AuthDBView):
     def login(self):
         redirect_url = self.appbuilder.get_url_for_index
         user_name = request.args.get('username')
+        email = request.args.get('email')
         password = request.args.get('password')
         user_role = request.args.get('role')
         oa_user_id = request.args.get('id')
         oa_uid = request.args.get('oa_uid')
+        oa_cid = request.args.get('oa_cid')
         if user_name is not None:
             user = self.appbuilder.sm.find_user(username=user_name)
             if not user:
@@ -27,14 +29,15 @@ class CustomAuthDBView(AuthDBView):
                 user = self.appbuilder.sm.add_user(
                     user_name,
                     user_name,
-                    'last_name',
-                    user_name + "@singoo.cc",
+                    '',
+                    email,
                     role,
                     password=password
                 )
 
                 user.oa_user_id = oa_user_id
                 user.oa_uid = oa_uid
+                user.oa_cid = oa_cid
 
                 self.appbuilder.sm.update_user(user)
 
@@ -52,6 +55,7 @@ class CustomUser(User):
 
     oa_user_id = Column(Integer)
     oa_uid = Column(String(36))
+    oa_cid = Column(String(36))
 
 
 class CustomSecurityManager(SupersetSecurityManager):
