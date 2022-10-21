@@ -15,6 +15,10 @@ class CustomAuthDBView(AuthDBView):
     @expose('/login/', methods=['GET', 'POST'])
     def login(self):
 
+        # 先退出已登录用户
+        if security_manager.current_user is not None:
+            logout_user()
+
         redirect_url = self.appbuilder.get_url_for_index
         user_name = request.args.get('username')
         email = request.args.get('email')
