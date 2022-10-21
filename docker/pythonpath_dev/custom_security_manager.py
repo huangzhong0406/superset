@@ -5,24 +5,39 @@ from superset.security import SupersetSecurityManager
 from flask_appbuilder.security.views import expose
 from flask_appbuilder.security.manager import BaseSecurityManager
 from flask_login import login_user, logout_user
+from flask_appbuilder.security.sqla.models import User
+from sqlalchemy import Column, String, Integer
+from superset.extensions import security_manager
 
 
 class CustomAuthDBView(AuthDBView):
 
-    @expose('/login2/', methods=['GET', 'POST'])
+    @expose('/login/', methods=['GET', 'POST'])
     def login(self):
         redirect_url = self.appbuilder.get_url_for_index
         user_name = request.args.get('username')
         password = request.args.get('password')
         user_role = request.args.get('role')
-        user_id = request.args.get('id')
+        oa_user_id = request.args.get('id')
+        oa_uid = request.args.get('oa_uid')
         if user_name is not None:
             user = self.appbuilder.sm.find_user(username=user_name)
             if not user:
                 role = self.appbuilder.sm.find_role(user_role)
-                user = self.appbuilder.sm.add_user(user_name, user_name, 'last_name',
-                                                   user_name + "@singoo.cc", role,
-                                                   password=password)
+                user = self.appbuilder.sm.add_user(
+                    user_name,
+                    user_name,
+                    'last_name',
+                    user_name + "@singoo.cc",
+                    role,
+                    password=password
+                )
+
+                user.oa_user_id = oa_user_id
+                user.oa_uid = oa_uid
+
+                self.appbuilder.sm.update_user(user)
+
             if user:
                 login_user(user, remember=False)
                 return redirect(redirect_url)
@@ -32,7 +47,15 @@ class CustomAuthDBView(AuthDBView):
             return super(CustomAuthDBView, self).login()
 
 
+class CustomUser(User):
+    __tablename__ = "ab_user"
+
+    oa_user_id = Column(Integer)
+    oa_uid = Column(String(36))
+
+
 class CustomSecurityManager(SupersetSecurityManager):
+    user_model = CustomUser
     authdbview = CustomAuthDBView
 
     def __init__(self, appbuilder):

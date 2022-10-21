@@ -24,9 +24,10 @@ import logging
 import os
 from datetime import timedelta
 from typing import Optional
-
 from cachelib.file import FileSystemCache
 from celery.schedules import crontab
+from custom_security_manager import CustomSecurityManager
+import custom_jinja_context
 
 logger = logging.getLogger()
 
@@ -63,9 +64,15 @@ SQLALCHEMY_DATABASE_URI = "%s://%s:%s@%s:%s/%s" % (
 )
 
 # 自定义用户登录验证
-from custom_security_manager import CustomSecurityManager
-
 CUSTOM_SECURITY_MANAGER = CustomSecurityManager
+
+
+# 自定义Jinja模板
+JINJA_CONTEXT_ADDONS = {
+
+    'get_current_user': custom_jinja_context.get_current_user,
+
+}
 
 REDIS_HOST = get_env_variable("REDIS_HOST")
 REDIS_PORT = get_env_variable("REDIS_PORT")
