@@ -14,6 +14,7 @@ class CustomAuthDBView(AuthDBView):
 
     @expose('/login/', methods=['GET', 'POST'])
     def login(self):
+
         redirect_url = self.appbuilder.get_url_for_index
         user_name = request.args.get('username')
         email = request.args.get('email')
@@ -22,9 +23,15 @@ class CustomAuthDBView(AuthDBView):
         oa_user_id = request.args.get('id')
         oa_uid = request.args.get('oa_uid')
         oa_cid = request.args.get('oa_cid')
+
         if user_name is not None:
             user = self.appbuilder.sm.find_user(username=user_name)
             if not user:
+
+                # 邮箱重复返回登录页
+                if self.appbuilder.sm.find_user(email=email) is not None:
+                    return super(CustomAuthDBView, self).login()
+
                 role = self.appbuilder.sm.find_role(user_role)
                 user = self.appbuilder.sm.add_user(
                     user_name,
