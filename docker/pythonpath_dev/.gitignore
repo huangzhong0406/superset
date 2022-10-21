@@ -22,3 +22,4 @@
 !superset_config.py
 !superset_config_local.example
 !custom_security_manager.py
+!custom_jinja_context.py
