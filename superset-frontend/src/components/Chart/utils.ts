@@ -16,29 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { SAMPLE_DASHBOARD_1 } from 'cypress/utils/urls';
-import { interceptFav, interceptUnfav } from './utils';
 
-describe('Dashboard actions', () => {
-  beforeEach(() => {
-    cy.createSampleDashboards([0]);
-    cy.visit(SAMPLE_DASHBOARD_1);
-  });
+export const MENU_ITEM_HEIGHT = 32;
+const MENU_VERTICAL_SPACING = 32;
 
-  it('should allow to favorite/unfavorite dashboard', () => {
-    interceptFav();
-    interceptUnfav();
+/**
+ * Calculates an adjusted Y-offset for a menu or submenu to prevent that
+ * menu from appearing offscreen
+ *
+ * @param clientY The original Y-offset
+ * @param itemsCount The number of menu items
+ */
+export function getMenuAdjustedY(clientY: number, itemsCount: number) {
+  // Viewport height
+  const vh = Math.max(
+    document.documentElement.clientHeight || 0,
+    window.innerHeight || 0,
+  );
 
-    cy.getBySel('dashboard-header-container')
-      .find("[aria-label='favorite-unselected']")
-      .click();
-    cy.wait('@select');
-    cy.getBySel('dashboard-header-container')
-      .find("[aria-label='favorite-selected']")
-      .click();
-    cy.wait('@unselect');
-    cy.getBySel('dashboard-header-container')
-      .find("[aria-label='favorite-selected']")
-      .should('not.exist');
-  });
-});
+  const menuHeight = MENU_ITEM_HEIGHT * itemsCount + MENU_VERTICAL_SPACING;
+  // Always show the context menu inside the viewport
+  return vh - clientY < menuHeight ? vh - menuHeight : clientY;
+}

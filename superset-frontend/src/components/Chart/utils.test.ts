@@ -16,29 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { SAMPLE_DASHBOARD_1 } from 'cypress/utils/urls';
-import { interceptFav, interceptUnfav } from './utils';
 
-describe('Dashboard actions', () => {
-  beforeEach(() => {
-    cy.createSampleDashboards([0]);
-    cy.visit(SAMPLE_DASHBOARD_1);
-  });
+import { getMenuAdjustedY } from './utils';
 
-  it('should allow to favorite/unfavorite dashboard', () => {
-    interceptFav();
-    interceptUnfav();
+const originalInnerHeight = window.innerHeight;
 
-    cy.getBySel('dashboard-header-container')
-      .find("[aria-label='favorite-unselected']")
-      .click();
-    cy.wait('@select');
-    cy.getBySel('dashboard-header-container')
-      .find("[aria-label='favorite-selected']")
-      .click();
-    cy.wait('@unselect');
-    cy.getBySel('dashboard-header-container')
-      .find("[aria-label='favorite-selected']")
-      .should('not.exist');
-  });
+beforeEach(() => {
+  window.innerHeight = 500;
+});
+
+afterEach(() => {
+  window.innerHeight = originalInnerHeight;
+});
+
+test('correctly positions at upper edge of screen', () => {
+  expect(getMenuAdjustedY(75, 1)).toEqual(75); // No adjustment
+  expect(getMenuAdjustedY(75, 2)).toEqual(75); // No adjustment
+  expect(getMenuAdjustedY(75, 3)).toEqual(75); // No adjustment
+});
+
+test('correctly positions at lower edge of screen', () => {
+  expect(getMenuAdjustedY(425, 1)).toEqual(425); // No adjustment
+  expect(getMenuAdjustedY(425, 2)).toEqual(404); // Adjustment
+  expect(getMenuAdjustedY(425, 3)).toEqual(372); // Adjustment
 });
