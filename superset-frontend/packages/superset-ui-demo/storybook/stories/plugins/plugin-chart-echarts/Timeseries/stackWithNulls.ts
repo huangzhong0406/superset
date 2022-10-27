@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -17,28 +17,20 @@
  * under the License.
  */
 
-import { NavBarProps, MenuObjectProps } from './Menu';
-
-export interface ExtentionConfigs {
-  ALLOWED_EXTENSIONS: Array<any>;
-  CSV_EXTENSIONS: Array<any>;
-  COLUMNAR_EXTENSIONS: Array<any>;
-  EXCEL_EXTENSIONS: Array<any>;
-  HAS_GSHEETS_INSTALLED: boolean;
-}
-export interface RightMenuProps {
-  align: 'flex-start' | 'flex-end';
-  settings: MenuObjectProps[];
-  navbarRight: NavBarProps;
-  isFrontendRoute: (path?: string) => boolean;
-  environmentTag: {
-    text: string;
-    color: string;
-  };
-}
-
-export enum GlobalMenuDataOptions {
-  GOOGLE_SHEETS = 'gsheets',
-  DB_CONNECTION = 'dbconnection',
-  DATASET_CREATION = 'datasetCreation',
-}
+export default [
+  {
+    ds: 1293840000000,
+    '1': 2,
+    '2': 1,
+  },
+  {
+    ds: 1325376000000,
+    '1': null,
+    '2': null,
+  },
+  {
+    ds: 1356998400000,
+    '1': null,
+    '2': 1,
+  },
+];
