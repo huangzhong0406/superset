@@ -12,8 +12,8 @@ def get_current_user(column: string = ''):
 
 
 def current_date():
-    return datetime.datetime.now().strftime('%Y-%m-%d')
+    return datetime.now().strftime('%Y-%m-%d')
 
 
 def current_datetime():
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
