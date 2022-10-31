@@ -78,6 +78,8 @@ CUSTOM_SECURITY_MANAGER = CustomSecurityManager
 JINJA_CONTEXT_ADDONS = {
 
     'get_current_user': custom_jinja_context.get_current_user,
+    'current_date': custom_jinja_context.current_date,
+    'current_datetime': custom_jinja_context.current_datetime,
 
 }
 
