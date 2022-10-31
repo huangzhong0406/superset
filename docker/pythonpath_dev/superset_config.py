@@ -81,6 +81,9 @@ JINJA_CONTEXT_ADDONS = {
 
 }
 
+# mapbox的token
+MAPBOX_API_KEY = get_env_variable("MAPBOX_API_KEY")
+
 REDIS_HOST = get_env_variable("REDIS_HOST")
 REDIS_PORT = get_env_variable("REDIS_PORT")
 REDIS_CELERY_DB = get_env_variable("REDIS_CELERY_DB", "0")
