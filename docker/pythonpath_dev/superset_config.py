@@ -80,6 +80,7 @@ JINJA_CONTEXT_ADDONS = {
     'get_current_user': custom_jinja_context.get_current_user,
     'current_date': custom_jinja_context.current_date,
     'current_datetime': custom_jinja_context.current_datetime,
+    'contract_performance_data_permission': custom_jinja_context.contract_performance_data_permission,
 
 }
 
