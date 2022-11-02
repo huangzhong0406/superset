@@ -26,8 +26,13 @@ def getTopLevelCompanyUuid():
     return '14748906195710318'
 
 
-# 连接singoo_pms数据库
 def get_singoopms_data(sql: string = '', is_more: bool = False):
+    """
+    连接singoo_pms数据库
+    :param string sql:
+    :param bool is_more:
+    :return
+    """
     # host = os.getenv("DB_HOST_SINGOOPMS")
     # port = os.getenv("DB_PORT_SINGOOPMS")
     # database = os.getenv("DB_DATABASE_SINGOOPMS")
@@ -35,7 +40,7 @@ def get_singoopms_data(sql: string = '', is_more: bool = False):
     # password = os.getenv("DB_PASSWORD_SINGOOPMS")
 
     host = os.environ.get("DB_HOST_SINGOOPMS")
-    port = os.environ.get("DB_PORT_SINGOOPMS")
+    port = int(os.environ.get("DB_PORT_SINGOOPMS"))
     database = os.environ.get("DB_DATABASE_SINGOOPMS")
     user = os.environ.get("DB_USERNAME_SINGOOPMS")
     password = os.environ.get("DB_PASSWORD_SINGOOPMS")
@@ -57,11 +62,21 @@ def get_singoopms_data(sql: string = '', is_more: bool = False):
     return data
 
 
-# contract_performance 数据集权限
-def contract_performance_data_permission():
+def contract_performance_data_permission(alias: string = '') -> str:
+    """
+    contract_performance 数据集权限
+    contract_performance_data_permission
+
+    :param str alias: contract_performances table alias
+    :return: string
+    """
     current_user_id = get_current_user('oa_user_id')
     current_uid = get_current_user('oa_uid')
     current_cid = get_current_user('oa_cid')
+
+    # contract_performances表别名
+    if alias:
+        alias = alias + '.'
 
     # 管理员
     if current_user_id == 1:
@@ -73,7 +88,7 @@ def contract_performance_data_permission():
         % (current_cid, current_user_id))
     if company is not None:
         # 返回sql 条件语句
-        return 'company_id = ' + '\'' + company['uuid'] + '\''
+        return alias + 'company_id = ' + '\'' + company['uuid'] + '\''
 
     support_companies = get_singoopms_data(
         "SELECT com.id, com.uuid, com.name, com_sp.user_id, com_sp.support_position FROM iam_company_support_personnels com_sp LEFT JOIN iam_companies com ON com.id = com_sp.company_id WHERE com_sp.user_id =  %s"
@@ -89,7 +104,7 @@ def contract_performance_data_permission():
             company_uuids = "','".join(company_uuids)
 
             # 返回sql 条件语句
-            return "company_id in (\'" + company_uuids + "\')"
+            return alias + "company_id in (\'" + company_uuids + "\')"
 
     # 部门主管权限
     managedTeams = get_singoopms_data("SELECT * FROM iam_teams WHERE team_master = %s"
@@ -99,7 +114,7 @@ def contract_performance_data_permission():
         team_uuids = managedTeams['uuid'].tolist()
         team_uuids = "','".join(team_uuids)
 
-        return "team_id in (\'" + team_uuids + "\')"
+        return alias + "team_id in (\'" + team_uuids + "\')"
 
     # 自己看自己
-    return 'user_id = \'%s\'' % current_uid
+    return alias + 'user_id = \'%s\'' % current_uid
