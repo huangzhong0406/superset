@@ -28,12 +28,17 @@ def getTopLevelCompanyUuid():
 
 # 连接singoo_pms数据库
 def get_singoopms_data(sql: string = '', is_more: bool = False):
-    host = os.getenv("DB_HOST_SINGOOPMS")
+    # host = os.getenv("DB_HOST_SINGOOPMS")
     # port = os.getenv("DB_PORT_SINGOOPMS")
-    port = 3306
-    database = os.getenv("DB_DATABASE_SINGOOPMS")
-    user = os.getenv("DB_USERNAME_SINGOOPMS")
-    password = os.getenv("DB_PASSWORD_SINGOOPMS")
+    # database = os.getenv("DB_DATABASE_SINGOOPMS")
+    # user = os.getenv("DB_USERNAME_SINGOOPMS")
+    # password = os.getenv("DB_PASSWORD_SINGOOPMS")
+
+    host = os.environ.get("DB_HOST_SINGOOPMS")
+    port = os.environ.get("DB_PORT_SINGOOPMS")
+    database = os.environ.get("DB_DATABASE_SINGOOPMS")
+    user = os.environ.get("DB_USERNAME_SINGOOPMS")
+    password = os.environ.get("DB_PASSWORD_SINGOOPMS")
 
     db = MySQLdb.connect(host=host, port=port, user=user, password=password,
                          database=database, cursorclass=cursors.DictCursor,
