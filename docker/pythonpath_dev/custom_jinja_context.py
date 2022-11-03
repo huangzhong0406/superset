@@ -2,6 +2,7 @@ import string
 import os
 from superset.extensions import security_manager
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import pandas as pd
 import MySQLdb
 from MySQLdb import cursors
@@ -20,6 +21,19 @@ def current_date():
 
 def current_datetime():
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+def min_start_time(start, end):
+    start = datetime.strptime(start, '%Y-%m-%d')
+    end = datetime.strptime(end, '%Y-%m-%d')
+    want_days = (end - start).days
+    modified_date = start + relativedelta(days=-1 * want_days)
+    modified_date2 = start + relativedelta(years=-1)
+    res = modified_date2
+    if (modified_date - modified_date2).days < 0:
+        res = modified_date
+    res = res.strftime("%Y-%m-%d")
+    return res
 
 
 def getTopLevelCompanyUuid():
