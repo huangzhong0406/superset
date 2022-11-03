@@ -24,6 +24,8 @@ def current_datetime():
 
 
 def min_start_time(start, end):
+    start = start[0:10]
+    end = end[0:10]
     start = datetime.strptime(start, '%Y-%m-%d')
     end = datetime.strptime(end, '%Y-%m-%d')
     want_days = (end - start).days
