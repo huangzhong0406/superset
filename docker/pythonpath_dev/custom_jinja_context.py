@@ -2,6 +2,7 @@ import string
 import os
 from superset.extensions import security_manager
 from datetime import datetime
+from pytz import timezone
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 import MySQLdb
@@ -15,12 +16,16 @@ def get_current_user(column: string = ''):
     return getattr(current_user, column)
 
 
+def get_timezone(tz: string = 'Asia/Shanghai'):
+    return timezone(tz)
+
+
 def current_date():
-    return datetime.now().strftime('%Y-%m-%d')
+    return datetime.now(tz=get_timezone()).strftime('%Y-%m-%d')
 
 
 def current_datetime():
-    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.now(tz=get_timezone()).strftime('%Y-%m-%d %H:%M:%S')
 
 
 def min_start_time(start, end):
