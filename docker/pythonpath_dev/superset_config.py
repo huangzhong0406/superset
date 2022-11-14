@@ -103,7 +103,8 @@ CACHE_CONFIG = {
     "CACHE_REDIS_PORT": REDIS_PORT,
     "CACHE_REDIS_DB": REDIS_RESULTS_DB,
 }
-DATA_CACHE_CONFIG = CACHE_CONFIG
+# 去掉数据缓存 (数据面板加载缓存数据，导致会看串数据，我们的数据集是根据用户身份控制的)
+DATA_CACHE_CONFIG = {"CACHE_TYPE": "NullCache"}
 
 
 class CeleryConfig(object):
