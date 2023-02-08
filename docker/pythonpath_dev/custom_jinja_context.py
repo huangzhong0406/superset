@@ -100,7 +100,7 @@ def contract_performance_data_permission(alias: string = '') -> str:
         alias = alias + '.'
 
     # 管理员
-    if current_user_id == 1:
+    if current_user_id == 1 or current_user_id == 51:
         return '1=1'
 
     # 公司老板
