@@ -135,7 +135,7 @@ def contract_performance_data_permission(alias: string = '') -> str:
         team_uuids = managedTeams['uuid'].tolist()
         team_uuids = "','".join(team_uuids)
 
-        return alias + "team_id in (\'" + team_uuids + "\')"
+        return '(' + alias + "team_id IN (\'" + team_uuids + "\')" + ' OR ' + alias + "user_id = \'" + current_uid + "\'" + ')'
 
     # 自己看自己
     return alias + 'user_id = \'%s\'' % current_uid
